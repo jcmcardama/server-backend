@@ -78,8 +78,8 @@ Edit database schemas and models in the root `prisma/schema.prisma` file.
 1. **Clone the repository**
 
 ```bash
-   git clone [https://github.com/jcmcardama/chat-backend.git](https://github.com/jcmcardama/chat-backend.git)
-   cd chat-backend
+   git clone https://github.com/jcmcardama/server-backend.git
+   cd server-backend
 ```
 
 2. **Install dependencies**
