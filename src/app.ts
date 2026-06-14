@@ -3,7 +3,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { errorHandler } from './middlewares/errorHandler';
 import { AppError } from './utils/appError';
-import authRouter from './routes/auth.routes'; // <-- IMPORT AUTH ROUTER
+import authRouter from './routes/auth.routes';
+import userRouter from './routes/user.routes';
 
 const app: Application = express();
 
@@ -13,7 +14,8 @@ app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser()); 
 
 // 2. Mount API Application Feature Handlers
-app.use('/api/auth', authRouter); // <-- MOUNT ROUTER HERE
+app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
 // 3. Health Check Route
 app.get('/health', (req: Request, res: Response) => {
