@@ -23,9 +23,14 @@ export const registerSchema = z.object({
 
 export const loginSchema = z.object({
   body: z.object({
-    email: z.email({ error: 'Invalid email address' }).trim().lowercase(),
+    identifier: z.string({ 
+      error: 'Username or Email is required' 
+    })
+      .trim()
+      .min(1, { error: 'Username or Email cannot be blank' }),
+    
     password: z.string({ 
-      error: (issue) => issue.input === undefined ? 'Password is required' : 'Password must be a valid string' 
+        error: 'Password is required' 
     }),
   }),
 });

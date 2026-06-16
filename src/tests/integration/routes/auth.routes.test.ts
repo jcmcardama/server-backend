@@ -56,12 +56,12 @@ describe('Auth Routing Pipelines - Complete Integration Tests', () => {
   describe('POST /api/auth/login', () => {
     it('should authorize a user with correct credentials and issue cookies', async () => {
       const cryptedHash = await hashPassword(password);
-      prismaMock.user.findUnique.mockResolvedValue(dummyUser(cryptedHash));
+      prismaMock.user.findFirst.mockResolvedValue(dummyUser(cryptedHash));
       prismaMock.user.update.mockResolvedValue(dummyUser(cryptedHash));
 
       const res = await request(app)
         .post('/api/auth/login')
-        .send({ email: 'runner@example.com', password });
+        .send({ identifier: 'runner@example.com', password });
 
       expect(res.status).toBe(200);
       expect(res.headers['set-cookie']).toBeDefined();
@@ -73,10 +73,10 @@ describe('Auth Routing Pipelines - Complete Integration Tests', () => {
 
       const res = await request(app)
         .post('/api/auth/login')
-        .send({ email: 'runner@example.com', password: 'WrongPasswordInput' });
+        .send({ identifier: 'runner@example.com', password: 'WrongPasswordInput' });
 
       expect(res.status).toBe(401);
-      expect(res.body.message).toBe('Invalid email or password');
+      expect(res.body.message).toBe('Invalid username or email or password');
     });
   });
 

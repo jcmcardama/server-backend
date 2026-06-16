@@ -39,19 +39,27 @@ export const registerUser = async (userData: any) => {
 /**
  * Business logic to verify a user's credentials and issue new tokens
  */
-export const loginUser = async (credentials: any) => {
-  const { email, password } = credentials;
+export const loginUser = async (credentials: { identifier: string; password: string }) => {
+  const { identifier, password } = credentials;
 
   // 1. Locate the user
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findFirst({ 
+    where: { 
+      OR: [
+        { email: identifier.toLowerCase() },
+        { username: identifier }
+      ]
+    } 
+  });
+
   if (!user) {
-    throw new AppError('Invalid email or password', 401); // 401 Unauthorized
+    throw new AppError('Invalid username or email or password', 401); // 401 Unauthorized
   }
 
   // 2. Validate the secret cryptographic hash match
   const isPasswordValid = await comparePassword(password, user.password);
   if (!isPasswordValid) {
-    throw new AppError('Invalid email or password', 401);
+    throw new AppError('Invalid username or email or password', 401);
   }
 
   // 3. Issue cryptographic tokens
